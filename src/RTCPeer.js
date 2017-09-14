@@ -8,7 +8,7 @@ class RTCPeer extends EventEmitter {
 		this.channels = channels
 		this._dbusObject = dbusObject
 
-		//default turn servers	
+		//default turn servers
 		this._turnServers = [ {urls: [ "stun:stun.l.google.com:19302" ]} ];
 
 		this._connect ()
@@ -36,7 +36,7 @@ class RTCPeer extends EventEmitter {
 
 	_connect () {
 		console.log("trying to connect to peer "+this.id+"...")
-	
+
 		this._connectSignaling ()
 	}
 
@@ -51,7 +51,7 @@ class RTCPeer extends EventEmitter {
 		}, (_, err, sessionToken) => {
 			console.log("session token for peer "+this.id+" : "+sessionToken)
 			this._dbusObject._d1inst(this._dbusObject._peerId).openSocket('/var/run/diya/rtc.sock', (_, err, socket) => {
-				socket.write(`${sessionToken}\n`)	
+				socket.write(`${sessionToken}\n`)
 
 				this._onSignalingConnected(messageify(socket))
 			})
@@ -66,7 +66,7 @@ class RTCPeer extends EventEmitter {
 	_onSignalingConnected (socket) {
 		console.log('signaling connected for peer '+this.id)
 		this._signaling = socket
-			
+
 		this._signaling.on('message', data => {
 			this._onSignalingMessage(JSON.parse(data))
 		})
@@ -81,7 +81,7 @@ class RTCPeer extends EventEmitter {
 		switch (message.func) {
 			case "TurnInfo":
 				this._onTurnInfo (message)
-				break 
+				break
 			case "RemoteOffer":
 				this._onRemoteOffer (message)
 				break
@@ -100,34 +100,34 @@ class RTCPeer extends EventEmitter {
 	_onTurnInfo (turnInfos) {
 		if (!Array.isArray(turnInfos.servers)) return
 
-		this._turnServers = turnInfos.servers.map(server => { 
-			return { 
-				urls: [ server.url ], 
-				username: server.username, 
-				credential: server.password 
-			} 
+		this._turnServers = turnInfos.servers.map(server => {
+			return {
+				urls: [ server.url ],
+				username: server.username,
+				credential: server.password
+			}
 		})
 	}
-	
+
 	_onRemoteOffer (offer) {
 		this._peerConnection = new RTCPeerConnection({
 			iceServers: this._turnServers,
 			iceTransportPolicy: 'all'
 		}, {
 			mandatory: {
-				DtlsSrtpKeyAgreement: true, 
-				OfferToReceiveAudio: true, 
+				DtlsSrtpKeyAgreement: true,
+				OfferToReceiveAudio: true,
 				OfferToReceiveVideo:true
 			}
 		})
 
 		this._peerConnection.setRemoteDescription(new RTCSessionDescription({
-			sdp: offer.sdp, 
+			sdp: offer.sdp,
 			type: offer.type
 		}))
 
 		this._peerConnection.createAnswer(
-			localSDP => this._onLocalSDP(localSDP), 
+			localSDP => this._onLocalSDP(localSDP),
 			err => console.error (err),
 			{ mandatory: { 	OfferToReceiveAudio: true, OfferToReceiveVideo: true }}
 		)
@@ -146,7 +146,7 @@ class RTCPeer extends EventEmitter {
 	//////////////////////////////////////////////
 	////// local peer connection events //////////
 	//////////////////////////////////////////////
-	
+
 
 	_onLocalSDP (localSDP) {
 		this._peerConnection.setLocalDescription(localSDP);
@@ -181,7 +181,7 @@ class RTCPeer extends EventEmitter {
 		if (channel == null) {
 			console.warn (`no matching channel found for ${evt.channel.label}. Closing...`)
 			evt.channel.close()
-			return 
+			return
 		}
 
 		channel.setDataChannel (evt.channel)
@@ -192,7 +192,7 @@ class RTCPeer extends EventEmitter {
 		if (channel == null) {
 			console.warn (`no matching channel found for ${evt.channel.label}. Closing...`)
 			evt.stream.close()
-			return 
+			return
 		}
 
 		channel.setStream (evt.stream)

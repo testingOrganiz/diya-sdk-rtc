@@ -5,8 +5,8 @@
   "authors": [
     "Sylvain Mahé <sylv.mahe@gmail.com>"
   ],
-  "description": "SDK for accessing Diya One services",
-  "main": "build/diya-sdk-rtc.min.js",
+  "description": "SDK rtc for accessing Diya One rtc service",
+  "main": "build/rtc.min.js",
   "keywords": [
     "Diya",
     "One",

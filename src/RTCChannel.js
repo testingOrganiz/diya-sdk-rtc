@@ -8,7 +8,7 @@ class RTCChannel extends EventEmitter {
 		this.type = 'N/A'
 		this.frequency = 20
 		this._lastSendTimestamp = 0
-		
+
 		this._dataChannelCallback = dataChannelCallback
 		this._streamCallback = streamCallback
 
@@ -71,7 +71,7 @@ class RTCChannel extends EventEmitter {
 		} else {
 			console.warn("Ignore stream " + stream.id)
 		}
-	
+
 		console.log(`stream ${this.name} ready !`);
 	}
 
@@ -96,7 +96,7 @@ class RTCChannel extends EventEmitter {
 			if(isNaN(values[i])) return false
 			this._buffer[i] = values[i]
 		}
-		
+
 		this._requestSend()
 	}
 
@@ -146,7 +146,7 @@ class RTCChannel extends EventEmitter {
 		let valArray = new Float32Array(message.data)
 		this.emit('value', valArray)
 	}
-	
+
 	/** Called when the channel is closed on the remote side */
 	_onClose () {
 		console.log(`data channel ${this.name} closed !`)

@@ -16,7 +16,7 @@ module.exports = function (socket) {
 		let len = data.length
 		let msgComplete = false
 
-		//Size up msgBuf if it is too small 
+		//Size up msgBuf if it is too small
 		if(bufPos + data.length > msgBufSize){
 			msgBufSize = msgBufSize + 2*data.length
 			tmpBuf = new Buffer(msgBufSize)
@@ -59,11 +59,9 @@ module.exports = function (socket) {
 
 		buffer.writeInt32LE(message.length, 0)
 		buffer.write(message, 4)
-		
+
 		socket.write(buffer)
 	}
 
 	return socket
 }
-
-

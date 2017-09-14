@@ -78,11 +78,11 @@ class RTCController {
 
 			for(let j = 0; j < this._requestedChannels.length; j++){
 				let req = this._requestedChannels[j];
-	
+
 				if(!name || !name.match(req.regex) || this._usedChannels[name]) {
-					continue 
+					continue
 				}
-				
+
 				let channel = new RTCChannel(name, req.cb, req.stream_cb)
 				this._usedChannels[name] = channel
 				channels.push(channel)
